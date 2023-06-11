@@ -1,0 +1,19 @@
+# Python specific ignores
+*.pyc
+__pycache__/
+
+# IDE/Editor specific ignores
+.vscode/
+.idea/
+*.iml
+
+# Selenium specific ignores
+geckodriver.log
+geckodriver.log.*
+
+# WebDriver specific ignores
+driver/
+
+# Project specific ignores
+venv/
+.env
