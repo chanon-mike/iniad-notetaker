@@ -1,4 +1,5 @@
 import time
+import re
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -14,6 +15,22 @@ class MOOCsCrawler(WebDriverBase):
         # Go to MOOCs slide page
         self.driver.get(url)
 
+    def match_url(self, url):
+        pattern = r"https://moocs\.iniad\.org/courses/(\d+)/([A-Z]+)(\d+)/(\d+)/(\d+)"
+        result = re.search(pattern, url.strip())
+        formatted_name = ''
+
+        if result:
+            year = result.group(1)
+            course_code = result.group(2)
+            month = result.group(4)
+            day = result.group(5)
+            formatted_name = f"{year}_{course_code}_{month}_{day}"
+        else:
+            print("URLパターンが一致しないため、もう一回入力してください")
+
+        return formatted_name
+
     def extract_text(self):
         # Switch to extract text from google slide
         iframe = self.wait_for_element_presence(
@@ -21,16 +38,17 @@ class MOOCsCrawler(WebDriverBase):
         self.driver.switch_to.frame(iframe)
 
         text = ''
+        page_number = 1
         time.sleep(3)
 
         while True:
+            text += f'\nPage: {page_number}\n\n'
             # Find all <g> tags on current page
             g_elements = self.driver.find_elements(By.TAG_NAME, 'g')
             for element in g_elements:
                 element_text = element.get_attribute('aria-label')
-                if element_text and not element_text.strip().isdigit():
+                if element_text and not re.search(r"Copyright.*INIAD", element_text):
                     text += element_text
-                    print(element_text)
 
             # Go to next page
             next_button = self.wait_for_element_clickable(
@@ -39,6 +57,8 @@ class MOOCsCrawler(WebDriverBase):
                 # If next page is disabled, exit the loop
                 break
             next_button.send_keys(Keys.RETURN)
+
+            page_number += 1
 
         self.driver.switch_to.default_content()
 
