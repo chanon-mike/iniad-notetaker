@@ -63,7 +63,7 @@ try:
         (By.TAG_NAME, 'img')))
 except TimeoutException:
     print("Timeout occurred. The element did not appear within the specified timeout.")
-driver.get('https://moocs.iniad.org/courses/2023/CS114/03-2/02')
+driver.get('https://moocs.iniad.org/courses/2023/CS112/09/01')
 
 # Authentication to MOOCs
 try:
@@ -81,7 +81,8 @@ try:
     )
 except TimeoutException:
     print("Timeout occurred. The element did not appear within the specified timeout.")
-iframe = driver.find_element(By.TAG_NAME, "iframe")
+iframe = driver.find_element(By.CSS_SELECTOR, 'iframe[allowfullscreen="true"]')
+print(iframe)
 driver.switch_to.frame(iframe)
 
 # Find all text in the slide
@@ -92,21 +93,24 @@ while True:
     # Find all <g> tags on current page
     g_elements = driver.find_elements(By.TAG_NAME, 'g')
     for element in g_elements:
-        if element.get_attribute('aria-label'):
-            text += element.get_attribute('aria-label')
-            print(element.get_attribute('aria-label'))
+        element_text = element.get_attribute('aria-label')
+        if element_text and not element_text.strip().isdigit():
+            text += element_text
+            print(element_text)
 
     # Go to next page
-    next_button = driver.find_element(By.CSS_SELECTOR, '.punch-viewer-navbar-next')
+    next_button = wait.until(EC.element_to_be_clickable(
+        (By.CSS_SELECTOR, '.punch-viewer-navbar-next')))
+    print(next_button)
     if 'goog-flat-button-disabled' in next_button.get_attribute('class'):
         # If next page is disabled, exit the loop
         break
     next_button.send_keys(Keys.RETURN)
 
-# print(text)
+with open('text.txt', mode='w', encoding='utf-8') as f:
+    f.write(text)
 
 # Close the browser
 time.sleep(60)
 
-driver.switch_to.default_content()
 driver.quit()
