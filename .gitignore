@@ -17,3 +17,6 @@ driver/
 # Project specific ignores
 venv/
 .env
+
+# Output files
+output
