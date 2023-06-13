@@ -13,9 +13,15 @@ from selenium import webdriver
 # Initialize local env variables
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
+
+# Initialize
+path = './output'
+if not os.path.exists(path):
+    os.mkdir(path)
+
 email = os.environ.get('EMAIL')
-iniad_username = os.environ.get('USERNAME')
-iniad_password = os.environ.get('PASSWORD')
+iniad_username = os.environ.get('INAID_USERNAME')
+iniad_password = os.environ.get('INAID_PASSWORD')
 
 # Initialize driver
 chrome_options = Options()
