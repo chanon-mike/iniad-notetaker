@@ -16,16 +16,12 @@ class MOOCsCrawler(WebDriverBase):
         self.driver.get(url)
 
     def match_url(self, url):
-        pattern = r"https://moocs\.iniad\.org/courses/(\d+)/([A-Z]+)(\d+)/(\d+)/(\d+)"
+        pattern = r"https:\/\/moocs\.iniad\.org\/courses\/(\d+)\/([A-Z0-9-]+)\/([A-Z0-9-]+)\/(\d+)"
         result = re.search(pattern, url.strip())
         formatted_name = ''
 
         if result:
-            year = result.group(1)
-            course_code = result.group(2)
-            month = result.group(4)
-            day = result.group(5)
-            formatted_name = f"{year}_{course_code}_{month}_{day}"
+            formatted_name = re.sub(pattern, r"\1_\2_\3_\4", url)
         else:
             print("URLパターンが一致しないため、もう一回入力してください")
 
