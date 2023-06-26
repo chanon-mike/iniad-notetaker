@@ -38,12 +38,12 @@ class MOOCsCrawler(WebDriverBase):
         time.sleep(3)
 
         while True:
-            text += f'\nPage: {page_number}\n\n'
+            text += f'\n\n'
             # Find all <g> tags on current page
             g_elements = self.driver.find_elements(By.TAG_NAME, 'g')
             for element in g_elements:
                 element_text = element.get_attribute('aria-label')
-                if element_text and not re.search(r"Copyright.*INIAD", element_text):
+                if element_text and not re.search(r"Copyright.*INIAD", element_text) and not element_text.strip().isdigit():
                     text += element_text
 
             # Go to next page
