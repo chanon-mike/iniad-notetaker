@@ -4,7 +4,7 @@ INIAD MOOCs システムのメモを取るプロセスを Web スクレイピン
 
 ### 見つけたバグ・問題
 
-[ ] スライドのアニメーションにより、同じ内容が複数ページにスクレイプされる。
+- [ ] スライドのアニメーションにより、同じ内容が複数ページにスクレイプされる。
 
 ### インストール方法
 
@@ -26,8 +26,8 @@ $ pip install -r requirements.txt
 ローカル環境での`.env.example`のファイル内容を自分のアカウントに変更し、`.env`にファイル名を変更してください。
 
 ```
-USERNAME = MOOCsのユーザーID
-PASSWORD = MOOCsのパスワード
+INAID_USERNAME = MOOCsのユーザーID
+INAID_PASSWORD = MOOCsのパスワード
 EMAIL = iniad.orgのメールアドレス
 ```
 
